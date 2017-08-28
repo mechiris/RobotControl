@@ -1,7 +1,8 @@
 from multiprocessing import Process, Pipe, Value
-# from Adafruit_PWM_Servo_Driver import PWM
-# import RPi.GPIO as GPIO
+from Adafruit_PWM_Servo_Driver import PWM
+import RPi.GPIO as GPIO
 import datetime, time
+import pandas as pd
 import numpy as np
 import subprocess as sbp
 import logging
@@ -40,13 +41,33 @@ class RobotControl():
 
     def start(self):
         logging.info('Run started')
+        self.userInputSingleServoPosition()
+
+    def goToServoPosition(self,channel,position):
+        self.pwm.setPWM(channel,0,position)
+    
+    def userInputSingleServoPosition(self):
+        while (True):
+            servoChannel = raw_input("Please input a servo channel (0-5).  Enter q to stop: ")
+            if servoChannel == 'q':
+                break;
+            while(True):
+                servoextent = raw_input("Please input a servo extent from 0 to 4096, or s to switch servo channel")
+                if servoextent == "s":
+                    logging.info('Switching channels')
+                    break;
+                else:
+                    pwm.setPWM(servoChannel, 0, int(servoextent))
+        
 
 
     def __init__(self):
-        print('test')
-        self.start()
-		# ### Configureable parameters ###
-		# # Motion init
-		# self.servoMin = 275  # Min pulse length out of 4096
-		# self.servoMax = 225  #325  # Max pulse length out of 4096
-		# self.servoSlack = 400
+        print('RobotControl Initialized')
+
+        self.pwm = PWM(0x40) #for debug: pwm = PWM(0x40, debug=True)
+        #self.start()
+        self.state = Value('d', -1) #multiprocessing thread safe value passing
+
+        if not os.path.exists('/var/log/robotcontrol'):
+            os.makedirs('/var/log/robotcontrol')
+        logging.basicConfig(filename='/var/log/autopump/robotcontrol.log',level=logging.INFO)
