@@ -5,7 +5,7 @@ setup(name='RobotControl',
       packages=['robotcontrol'],
       entry_points={
           'console_scripts': [
-              'autopump = robotcontrol.__main__:main'
+              'robotcontrol = robotcontrol.__main__:main'
           ]
       },
       )
