@@ -54,7 +54,7 @@ class RobotControl():
         for channel,col in enumerate(tp.columns[2:]):
             position = tp.loc[tp.index[0],col]
             if position != '*':
-                goToServoPosition(channel,position)
+                self.goToServoPosition(channel,position)
     
     def userInputSingleServoPosition(self):
         while (True):
