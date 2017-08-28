@@ -53,8 +53,8 @@ class RobotControl():
             return
         for channel,col in enumerate(tp.columns[2:]):
             position = tp.loc[tp.index[0],col]
-            if position != '*':
-                self.goToServoPosition(channel,position)
+            if ~pd.isnull(position):
+                self.goToServoPosition(int(channel),int(position))
     
     def userInputSingleServoPosition(self):
         while (True):
@@ -96,7 +96,7 @@ class RobotControl():
             time.sleep(1)
             goToTeachPoint('grip_open')
             time.sleep(1)
-            
+
     def __init__(self):
         print('RobotControl Initializing')
         if not os.path.exists('/var/log/robotcontrol'):
