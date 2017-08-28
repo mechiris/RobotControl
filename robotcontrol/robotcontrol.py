@@ -57,7 +57,7 @@ class RobotControl():
                     logging.info('Switching channels')
                     break;
                 else:
-                    pwm.setPWM(servoChannel, 0, int(servoextent))
+                    self.pwm.setPWM(servoChannel, 0, int(servoextent))
         
 
 
