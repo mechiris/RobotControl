@@ -46,6 +46,16 @@ class RobotControl():
     def goToServoPosition(self,channel,position):
         self.pwm.setPWM(channel,0,position)
     
+    def goToTeachPoint(self,teachpoint):
+        tp = self.teachpoints[self.teachpoints['Position'] == teachpoint]
+        if tp.shape<1:
+            logging.info('Teachpoint not found')
+            return
+        for channel,col in enumerate(tp.columns[2:]):
+            position = tp.loc[tp.index[0],col]
+            if position != '*':
+                goToServoPosition(channel,position)
+    
     def userInputSingleServoPosition(self):
         while (True):
             servoChannel = raw_input("Please input a servo channel (0-5).  Enter q to stop: ")
@@ -57,17 +67,17 @@ class RobotControl():
                     logging.info('Switching channels')
                     break;
                 else:
-                    self.pwm.setPWM(servoChannel, 0, int(servoextent))
+                    self.pwm.setPWM(int(servoChannel), 0, int(servoextent))
         
 
-
     def __init__(self):
-        print('RobotControl Initialized')
+        print('RobotControl Initializing')
+        if not os.path.exists('/var/log/robotcontrol'):
+            os.makedirs('/var/log/robotcontrol')
+        logging.basicConfig(filename='/var/log/autopump/robotcontrol.log',level=logging.INFO)
+
+        self.teachpoints = pd.read_excel('RobotPositions.xlsx',skiprows=1)
 
         self.pwm = PWM(0x40) #for debug: pwm = PWM(0x40, debug=True)
         #self.start()
         self.state = Value('d', -1) #multiprocessing thread safe value passing
-
-        if not os.path.exists('/var/log/robotcontrol'):
-            os.makedirs('/var/log/robotcontrol')
-        logging.basicConfig(filename='/var/log/autopump/robotcontrol.log',level=logging.INFO)
