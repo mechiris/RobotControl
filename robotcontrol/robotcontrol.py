@@ -68,8 +68,35 @@ class RobotControl():
                     break;
                 else:
                     self.pwm.setPWM(int(servoChannel), 0, int(servoextent))
-        
-
+    
+    def testSequence(self):
+        while(True):
+            goToTeachPoint('safety')
+            time.sleep(1)
+            goToTeachPoint('left_pick_hover')
+            time.sleep(1)
+            goToTeachPoint('left_pick')
+            time.sleep(1)
+            goToTeachPoint('grip_closed')
+            time.sleep(1)
+            goToTeachPoint('left_pick_hover')
+            time.sleep(1)
+            goToTeachPoint('safety')
+            time.sleep(1)
+            goToTeachPoint('right_pick_hover')
+            time.sleep(1)
+            goToTeachPoint('grip_open')
+            time.sleep(1)
+            goToTeachPoint('right_pick')
+            time.sleep(1)
+            goToTeachPoint('grip_closed')
+            time.sleep(1)
+            goToTeachPoint('right_pick_hover')
+            goToTeachPoint('safety')
+            time.sleep(1)
+            goToTeachPoint('grip_open')
+            time.sleep(1)
+            
     def __init__(self):
         print('RobotControl Initializing')
         if not os.path.exists('/var/log/robotcontrol'):
