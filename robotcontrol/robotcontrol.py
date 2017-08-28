@@ -93,10 +93,6 @@ class RobotControl():
             time.sleep(1)
             self.goToTeachPoint('right_pick_hover')
             time.sleep(1)
-            self.goToTeachPoint('safety')
-            time.sleep(1)
-            self.goToTeachPoint('grip_open')
-            time.sleep(1)
 
     def __init__(self):
         print('RobotControl Initializing')
