@@ -1,6 +1,6 @@
 from multiprocessing import Process, Pipe, Manager, Value
-#from Adafruit_PWM_Servo_Driver import PWM
-#import RPi.GPIO as GPIO
+from Adafruit_PWM_Servo_Driver import PWM
+import RPi.GPIO as GPIO
 import datetime, time
 import pandas as pd
 import numpy as np
@@ -159,8 +159,8 @@ class RobotControl():
         logging.basicConfig(filename='/var/log/robotcontrol/robotcontrol.log',level=logging.INFO)
         self.teachpoints = pd.read_excel('RobotPositions.xlsx',skiprows=1)
 
-        #self.pwm = PWM(0x40) #for debug: pwm = PWM(0x40, debug=True)
-        #self.goToTeachPoint('safety')
+        self.pwm = PWM(0x40) 
+        self.goToTeachPoint('safety')
         self.state = Manager().dict() #multiprocessing thread safe value passing
         self.state['state'] = 'Initializing'
 
