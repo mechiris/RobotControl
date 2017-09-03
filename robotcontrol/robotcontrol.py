@@ -38,6 +38,7 @@ class RobotControl():
 
     def goToServoPosition(self,channel,position):
         self.pwm.setPWM(channel,0,position)
+
     
     def goToTeachPointMenu(self):
         while (True):
@@ -52,7 +53,7 @@ class RobotControl():
                 self.goToTeachPoint(teachPoint)
         self.changeState(0)
 
-    def goToTeachPoint(self,teachpoint):
+    def goToTeachPoint(self,teachpoint,delay=0):
         tp = self.teachpoints[self.teachpoints['Position'] == teachpoint]
         if tp.shape<1:
             logging.info('Teachpoint not found')
@@ -61,6 +62,8 @@ class RobotControl():
             position = tp.loc[tp.index[0],col]
             if ~pd.isnull(position):
                 self.goToServoPosition(int(channel),int(position))
+        if delay>0:
+            time.sleep(delay)
     
     def goToServoPositionMenu(self):
         servoextent = ''
@@ -84,6 +87,8 @@ class RobotControl():
         
     def runSequence(self):
         print('running sequence')
+        
+        pts = [str(p).strip() for p in pts]
     
     def shutdown(self):
         logging.info('Shutting down system')
@@ -157,7 +162,8 @@ class RobotControl():
         if not os.path.exists('/var/log/robotcontrol'):
             os.makedirs('/var/log/robotcontrol')
         logging.basicConfig(filename='/var/log/robotcontrol/robotcontrol.log',level=logging.INFO)
-        self.teachpoints = pd.read_excel('RobotPositions.xlsx',skiprows=1)
+        self.teachpoints = pd.read_excel('RobotPositions.xlsx',sheetname='Teachpoints')
+        self.sequences = pd.read_excel('RobotPositions.xlsx',sheetname='Sequences')
 
         self.pwm = PWM(0x40) 
         self.goToTeachPoint('safety')
