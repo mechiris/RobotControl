@@ -46,6 +46,8 @@ class RobotControl():
     def printCurrentServoPositions(self):
         for x,pos in enumerate(self.servoPositions):
             print(str(x)+ ": " + str(pos))
+        self.changeState(0)
+
 
     def goToTeachPointMenu(self):
         while (True):
