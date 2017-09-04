@@ -93,9 +93,9 @@ class RobotControl():
                     logging.info('Return to main menu')
                     break;
                 elif servoextent == '\x1b[A': #up
-                    self.goToServoPosition(int(servoChannel),self.servoPositions[int(servoChannel)]+arrowDelta)
+                    self.goToServoPosition(int(servoChannel),int(self.servoPositions[int(servoChannel)]+arrowDelta))
                 elif servoextent == '\x1b[B':
-                    self.goToServoPosition(int(servoChannel),self.servoPositions[int(servoChannel)]-arrowDelta)
+                    self.goToServoPosition(int(servoChannel),int(self.servoPositions[int(servoChannel)]-arrowDelta))
                 else:
                     self.goToServoPosition(int(servoChannel), int(servoextent))
         self.changeState(0)
