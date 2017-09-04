@@ -41,8 +41,12 @@ class RobotControl():
 
     def goToServoPosition(self,channel,position):
         self.pwm.setPWM(channel,0,position)
-
+        self.servoPositions[channel] = position #update current log of positions
     
+    def printCurrentServoPositions(self):
+        for x,pos in enumerate(self.servoPositions):
+            print(str(x)+ ": " + str(pos))
+
     def goToTeachPointMenu(self):
         while (True):
             print('\n')
@@ -70,6 +74,7 @@ class RobotControl():
     
     def goToServoPositionMenu(self):
         servoextent = ''
+        arrowDelta = 10 #delta to move when using arrow keys
         while (True):
             if servoextent == 'q':
                 break;
@@ -77,13 +82,18 @@ class RobotControl():
             if servoChannel == 'q':
                 break;
             while(True):
-                servoextent = raw_input("Please input a servo extent from 0 to 4096, or s to switch servo channel, q to return to the main menu")
-                if servoextent == "s":
+                servoextent = raw_input("Please input a servo extent from 0 to 4096,  up or down arrows to nudge, or s to switch servo channel, q to return to the main menu")
+                ## TODO: error input handling
+                if servoextent == "s": 
                     logging.info('Switching channels')
                     break;
                 if servoextent == "q":
                     logging.info('Return to main menu')
                     break;
+                if servoextent == '\x1b[A': #up
+                    self.setPWM(int(servoChannel),0,self.servoPositions[int(servoChannel)]+arrowDelta)
+                if servoextent == '\x1b[B':
+                    self.setPWM(int(servoChannel),0,self.servoPositions[int(servoChannel)]-arrowDelta)
                 else:
                     self.pwm.setPWM(int(servoChannel), 0, int(servoextent))
         self.changeState(0)
@@ -130,7 +140,8 @@ class RobotControl():
         1 : 'runSequence',
         2 : 'goToTeachPoint',
         3 : 'goToServoPosition',
-        4 : 'shutdown',
+        4 : 'printCurrentServoPositions',
+        5 : 'shutdown',
         }  
         self.state['state'] = states[newState]
 
@@ -139,7 +150,8 @@ class RobotControl():
         1 : self.runSequence,
         2 : self.goToTeachPointMenu,
         3 : self.goToServoPositionMenu,
-        4 : self.shutdown,
+        4 : self.printCurrentServoPositions,
+        5 : self.shutdown,
         }  
         options[newState]()
 
@@ -152,16 +164,15 @@ class RobotControl():
         print('1. Run Sequence')
         print('2. Go To TeachPoint')
         print('3. Go To Servo Position')
-        print('4. Shutdown')
+        print('4. List Current Servo Positions')
+        print('5. Shutdown')
         newState = raw_input("Please input a number: ")
         self.changeState(int(newState))
-        #runSequence
-        #goToTeachPoint
-        #goToServoPosition
-        #shutdown
 
     def __init__(self):
         #print('RobotControl Initializing')
+        number_of_servos = 6
+
         if not os.path.exists('/var/log/robotcontrol'):
             os.makedirs('/var/log/robotcontrol')
         logging.basicConfig(filename='/var/log/robotcontrol/robotcontrol.log',level=logging.INFO)
@@ -170,6 +181,7 @@ class RobotControl():
 
         self.pwm = PWM(0x40) 
         self.goToTeachPoint('safety')
+        self.servoPositions = self.teachpoints.loc[self.teachpoints['Position']=='safety'].iloc[:,2:].values[0]
         self.state = Manager().dict() #multiprocessing thread safe value passing
         self.state['state'] = 'Initializing'
 
