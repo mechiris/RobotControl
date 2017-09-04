@@ -89,12 +89,12 @@ class RobotControl():
                 if servoextent == "s": 
                     logging.info('Switching channels')
                     break;
-                if servoextent == "q":
+                else if servoextent == "q":
                     logging.info('Return to main menu')
                     break;
-                if servoextent == '\x1b[A': #up
+                else if servoextent == '\x1b[A': #up
                     self.setPWM(int(servoChannel),0,self.servoPositions[int(servoChannel)]+arrowDelta)
-                if servoextent == '\x1b[B':
+                else if servoextent == '\x1b[B':
                     self.setPWM(int(servoChannel),0,self.servoPositions[int(servoChannel)]-arrowDelta)
                 else:
                     self.pwm.setPWM(int(servoChannel), 0, int(servoextent))
