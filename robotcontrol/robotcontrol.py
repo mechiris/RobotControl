@@ -1,6 +1,6 @@
 from multiprocessing import Process, Pipe, Manager, Value
 from Adafruit_PWM_Servo_Driver import PWM
-fromt dataposter import DataPoster
+from dataposter import DataPoster
 import RPi.GPIO as GPIO
 import datetime, time
 import pandas as pd
