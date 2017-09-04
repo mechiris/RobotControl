@@ -1,5 +1,6 @@
 from multiprocessing import Process, Pipe, Manager, Value
 from Adafruit_PWM_Servo_Driver import PWM
+fromt dataposter import DataPoster
 import RPi.GPIO as GPIO
 import datetime, time
 import pandas as pd
@@ -27,14 +28,16 @@ class RobotControl():
 
     def start(self):
         logging.info('Run started')
+
+        # self.dataPoster = DataPoster()
+        # self.dataPoster.Initialize(self.teachpoints,self.sequences,self.state)
         # self.parent_conn, self.child_conn = Pipe()
-        # p = Process(target=self.dataPoster, args=(self.state))
+        # p = Process(target=self.dp.changeState)
         # p.start()
 
         self.mainMenu()
 
-        p.join()
-        #self.userInputSingleServoPosition()
+        # p.join()
 
     def goToServoPosition(self,channel,position):
         self.pwm.setPWM(channel,0,position)
@@ -87,7 +90,7 @@ class RobotControl():
         
     def runSequence(self):
         print('running sequence')
-        
+
         pts = [str(p).strip() for p in pts]
     
     def shutdown(self):
