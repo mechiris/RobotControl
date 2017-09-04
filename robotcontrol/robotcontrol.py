@@ -93,11 +93,11 @@ class RobotControl():
                     logging.info('Return to main menu')
                     break;
                 elif servoextent == '\x1b[A': #up
-                    self.setPWM(int(servoChannel),0,self.servoPositions[int(servoChannel)]+arrowDelta)
+                    self.goToServoPosition(int(servoChannel),self.servoPositions[int(servoChannel)]+arrowDelta)
                 elif servoextent == '\x1b[B':
-                    self.setPWM(int(servoChannel),0,self.servoPositions[int(servoChannel)]-arrowDelta)
+                    self.goToServoPosition(int(servoChannel),self.servoPositions[int(servoChannel)]-arrowDelta)
                 else:
-                    self.pwm.setPWM(int(servoChannel), 0, int(servoextent))
+                    self.goToServoPosition(int(servoChannel), int(servoextent))
         self.changeState(0)
         
     def runSequence(self):
