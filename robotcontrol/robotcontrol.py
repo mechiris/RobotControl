@@ -137,25 +137,29 @@ class RobotControl():
             time.sleep(1)
 
     def changeState(self, newState):
-        states = {
-        0 : 'mainMenu',
-        1 : 'runSequence',
-        2 : 'goToTeachPoint',
-        3 : 'goToServoPosition',
-        4 : 'printCurrentServoPositions',
-        5 : 'shutdown',
-        }  
-        self.state['state'] = states[newState]
+        try:
+            states = {
+            0 : 'mainMenu',
+            1 : 'runSequence',
+            2 : 'goToTeachPoint',
+            3 : 'goToServoPosition',
+            4 : 'printCurrentServoPositions',
+            5 : 'shutdown',
+            }  
+            self.state['state'] = states[newState]
 
-        options = {
-        0 : self.mainMenu,
-        1 : self.runSequence,
-        2 : self.goToTeachPointMenu,
-        3 : self.goToServoPositionMenu,
-        4 : self.printCurrentServoPositions,
-        5 : self.shutdown,
-        }  
-        options[newState]()
+            options = {
+            0 : self.mainMenu,
+            1 : self.runSequence,
+            2 : self.goToTeachPointMenu,
+            3 : self.goToServoPositionMenu,
+            4 : self.printCurrentServoPositions,
+            5 : self.shutdown,
+            }  
+            options[newState]()
+        except:
+            print('Invalid option, returning to main menu')
+            self.changeState(0)
 
 
 
