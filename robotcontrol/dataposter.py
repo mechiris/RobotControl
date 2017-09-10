@@ -70,7 +70,8 @@ class DataPoster():
             cur_trajectory['counter'] = self.counter 
             cur_trajectory['timestamp'] = 0
             for x in np.arange(0,cur_trajectory.shape[0]):
-                cur_trajectory['timestamp'].iloc[x] = datetime.datetime.now() + datetime.timedelta(0,cur_trajectory['Time'].iloc[x])
+                cur_trajectory.loc[x,'timestamp'] = datetime.datetime.now() + datetime.timedelta(0,cur_trajectory.loc[x,'Time'])
+#                cur_trajectory['timestamp'].iloc[x] = datetime.datetime.now() + datetime.timedelta(0,cur_trajectory['Time'].iloc[x])
             self.saveTrajectory(cur_trajectory)            
             if self.state['state'] != initstate:
                 break;
