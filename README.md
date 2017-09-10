@@ -3,6 +3,7 @@ Robot control for a 6axis Rot2U
 
 # Install instructions
 pip install -r requirements.txt
+
 python setup.py develop
 
 # Usage
