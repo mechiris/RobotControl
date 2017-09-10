@@ -39,6 +39,38 @@ class RobotControl():
 
         # p.join()
 
+    def goToServoPositionSmooth(self,channel,position,delay=1,steps=25):
+        #this simply jerks then does a linear ramp over the move delay.  For longer moves, it is best practice to ramp at accel_max, move at vel_max, then decel.  The throw of the ROT2U is negligable for this, YMMV.
+        incdelay = 1.0*delay/steps
+        start_position = self.servoPositions[channel]
+        cur_pos = start_position
+        inc_step = inc_step = 1.0*(start_position - position)/steps
+
+        while(True):
+            arrived = False
+            new_pos = int(cur_pos + inc_step)
+            
+            if (start_position > position):
+                if (new_pos<=position):
+                    arrived = True
+                    new_pos = position
+            else:
+                if (new_pos >= position):
+                    arrived = True
+                    new_pos = position
+            self.pwm.setPWM(channel,0,new_pos)
+            self.servoPositions[channel] = new_pos
+            if arrived:
+                break
+            time.sleep(incdelay)
+            
+            
+
+
+        self.pwm.setPWM(channel,0,position)
+        self.servoPositions[channel] = position #update current log of positions
+
+
     def goToServoPosition(self,channel,position):
         self.pwm.setPWM(channel,0,position)
         self.servoPositions[channel] = position #update current log of positions
@@ -100,10 +132,25 @@ class RobotControl():
                     self.goToServoPosition(int(servoChannel), int(servoextent))
         self.changeState(0)
         
-    def runSequence(self):
+    def runSequence(self, sequence):
+        try:
+            cur_seq = sequences[sequences['sequence'] == sequence].iloc[0]
+            pts = [str(p).strip() for p in cur_seq['teachpoints'].split(',')]
+        except:
+            logging.info('No sequence ')
         print('running sequence')
+        if cur_seq['loop']:
+            logging.info('Looping sequence.  Use CTL+C to exit loop')
+        try:
+            logging.info('Running sequence')
+            while True:
+                time.sleep(1)
+                if not loop:
+                    break;
+        except KeyboardInterrupt:
+            logging.info('Keypress detected, returning from sequence loop')
+            pass
 
-        pts = [str(p).strip() for p in pts]
     
     def shutdown(self):
         logging.info('Shutting down system')
