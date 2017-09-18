@@ -54,7 +54,7 @@ class RobotControl():
                 movesarr[channel] = np.linspace(self.servoPositions[channel],position,steps)
             else:
                 movesarr[channel] = np.ones(steps) * self.servoPositions[channel] #dont move this servo
-        
+        movesarr = np.round(movesarr)
         for x in np.arange(0,steps):
             cur_positions = movesarr[:,x]
             for channel,value in enumerate(cur_positions):
