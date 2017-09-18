@@ -58,8 +58,8 @@ class RobotControl():
         for x in np.arange(0,steps):
             cur_positions = movesarr[:,x]
             for channel,value in enumerate(cur_positions):
-                self.pwm.setPWM(channel,0,new_pos)
-                self.servoPositions[channel] = new_pos
+                self.pwm.setPWM(channel,0,int(value))
+                self.servoPositions[channel] = int(value)
             time.sleep(incdelay)
 
     def goToServoPositionSmooth(self,channel,position,delay=1,steps=25):
@@ -263,7 +263,7 @@ class RobotControl():
 
         self.pwm = PWM(0x40) 
         self.servoPositions = self.teachpoints.loc[self.teachpoints['Position']=='safety'].iloc[:,2:].values[0]
-        self.goToTeachPoint('safety')
+        self.goToTeachpointSmooth('safety')
         self.state = Manager().dict() #multiprocessing thread safe value passing
         self.state['state'] = 'Initializing'
 
