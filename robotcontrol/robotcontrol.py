@@ -39,6 +39,29 @@ class RobotControl():
 
         # p.join()
 
+
+    def goToTeachpointSmooth(self,teachpoint,delay=1,steps=25):
+        #this simply jerks then does a linear ramp over the move delay.  For longer moves, it is best practice to ramp at accel_max, move at vel_max, then decel.  The throw of the ROT2U is negligable for this, YMMV.
+        incdelay = 1.0*delay/steps
+        tp = self.teachpoints[self.teachpoints['Position'] == teachpoint]
+        if tp.shape<1:
+            logging.info('Teachpoint not found')
+            return
+        movesarr = np.zeros((6,steps)) 
+        for channel,col in enumerate(tp.columns[2:]):
+            position = tp.loc[tp.index[0],col]
+            if ~pd.isnull(position):
+                movesarr[channel] = np.linspace(self.servoPositions[channel],position,steps)
+            else:
+                movesarr[channel] = np.ones(steps) * self.servoPositions[channel] #dont move this servo
+        
+        for x in np.arange(0,steps):
+            cur_positions = movesarr[:,x]
+            for channel,value in enumerate(cur_positions):
+                self.pwm.setPWM(channel,0,new_pos)
+                self.servoPositions[channel] = new_pos
+            time.sleep(incdelay)
+
     def goToServoPositionSmooth(self,channel,position,delay=1,steps=25):
         #this simply jerks then does a linear ramp over the move delay.  For longer moves, it is best practice to ramp at accel_max, move at vel_max, then decel.  The throw of the ROT2U is negligable for this, YMMV.
         incdelay = 1.0*delay/steps
