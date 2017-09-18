@@ -137,8 +137,13 @@ class RobotControl():
         try:
             cur_seq = sequences[sequences['sequence'] == sequence].iloc[0]
             pts = [str(p).strip() for p in cur_seq['teachpoints'].split(',')]
+            delays = cur_seq['delays'].split(',')
         except:
             logging.info('No sequence ')
+        if len(delays) != len(pts):
+            logging.info('Delays array is a different length than teachpoints.  Generating delays')
+            delays = np.arange()
+
         print('running sequence')
         if cur_seq['loop']:
             logging.info('Looping sequence.  Use CTL+C to exit loop')
@@ -198,7 +203,7 @@ class RobotControl():
 
             options = {
             0 : self.mainMenu,
-            1 : self.testSequence,
+            1 : self.runSequence,
             2 : self.goToTeachPointMenu,
             3 : self.goToServoPositionMenu,
             4 : self.printCurrentServoPositions,
