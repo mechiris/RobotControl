@@ -43,12 +43,12 @@ class RobotControl():
         #this simply jerks then does a linear ramp over the move delay.  For longer moves, it is best practice to ramp at accel_max, move at vel_max, then decel.  The throw of the ROT2U is negligable for this, YMMV.
         incdelay = 1.0*delay/steps
         start_position = self.servoPositions[channel]
-        cur_pos = start_position
-        inc_step = inc_step = 1.0*(start_position - position)/steps
+        inc_step = 1.0*(position - start_position)/steps
+        new_pos = start_position
 
         while(True):
             arrived = False
-            new_pos = int(cur_pos + inc_step)
+            new_pos = int(new_pos + inc_step)
             
             if (start_position > position):
                 if (new_pos<=position):
@@ -62,6 +62,7 @@ class RobotControl():
             self.servoPositions[channel] = new_pos
             if arrived:
                 break
+            print('moved {}, sleeping for {}'.format(new_pos,incdelay))
             time.sleep(incdelay)
             
             
@@ -197,7 +198,7 @@ class RobotControl():
 
             options = {
             0 : self.mainMenu,
-            1 : self.runSequence,
+            1 : self.testSequence,
             2 : self.goToTeachPointMenu,
             3 : self.goToServoPositionMenu,
             4 : self.printCurrentServoPositions,
