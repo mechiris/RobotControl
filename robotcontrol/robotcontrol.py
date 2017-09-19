@@ -263,7 +263,7 @@ class RobotControl():
 
         self.pwm = PWM(0x40) 
         self.servoPositions = self.teachpoints.loc[self.teachpoints['Position']=='rest'].iloc[:,2:].values[0]
-        self.goToTeachpointSmooth('safety')
+        self.goToTeachpoint('safety')
         self.state = Manager().dict() #multiprocessing thread safe value passing
         self.state['state'] = 'Initializing'
 
