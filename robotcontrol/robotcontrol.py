@@ -40,7 +40,7 @@ class RobotControl():
         # p.join()
 
 
-    def goToTeachpointSmooth(self,teachpoint,delay=1,steps=25):
+    def goToTeachPoint(self,teachpoint,delay=1,steps=25):
         #this simply jerks then does a linear ramp over the move delay.  For longer moves, it is best practice to ramp at accel_max, move at vel_max, then decel.  The throw of the ROT2U is negligable for this, YMMV.
         incdelay = 1.0*delay/steps
         tp = self.teachpoints[self.teachpoints['Position'] == teachpoint]
@@ -118,17 +118,17 @@ class RobotControl():
                 self.goToTeachPoint(teachPoint)
         self.changeState(0)
 
-    def goToTeachPoint(self,teachpoint,delay=0):
-        tp = self.teachpoints[self.teachpoints['Position'] == teachpoint]
-        if tp.shape<1:
-            logging.info('Teachpoint not found')
-            return
-        for channel,col in enumerate(tp.columns[2:]):
-            position = tp.loc[tp.index[0],col]
-            if ~pd.isnull(position):
-                self.goToServoPosition(int(channel),int(position))
-        if delay>0:
-            time.sleep(delay)
+    # def goToTeachPoint(self,teachpoint,delay=0):
+    #     tp = self.teachpoints[self.teachpoints['Position'] == teachpoint]
+    #     if tp.shape<1:
+    #         logging.info('Teachpoint not found')
+    #         return
+    #     for channel,col in enumerate(tp.columns[2:]):
+    #         position = tp.loc[tp.index[0],col]
+    #         if ~pd.isnull(position):
+    #             self.goToServoPosition(int(channel),int(position))
+    #     if delay>0:
+    #         time.sleep(delay)
     
     def goToServoPositionMenu(self):
         servoextent = ''
@@ -226,7 +226,7 @@ class RobotControl():
 
             options = {
             0 : self.mainMenu,
-            1 : self.runSequence,
+            1 : self.testSequence,
             2 : self.goToTeachPointMenu,
             3 : self.goToServoPositionMenu,
             4 : self.printCurrentServoPositions,
@@ -262,7 +262,7 @@ class RobotControl():
         self.sequences = pd.read_excel('RobotPositions.xlsx',sheetname='Sequences')
 
         self.pwm = PWM(0x40) 
-        self.servoPositions = self.teachpoints.loc[self.teachpoints['Position']=='safety'].iloc[:,2:].values[0]
+        self.servoPositions = self.teachpoints.loc[self.teachpoints['Position']=='rest'].iloc[:,2:].values[0]
         self.goToTeachpointSmooth('safety')
         self.state = Manager().dict() #multiprocessing thread safe value passing
         self.state['state'] = 'Initializing'
