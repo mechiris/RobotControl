@@ -262,7 +262,7 @@ class RobotControl():
         self.sequences = pd.read_excel('RobotPositions.xlsx',sheetname='Sequences')
 
         self.pwm = PWM(0x40) 
-        self.servoPositions = self.teachpoints.loc[self.teachpoints['Position']=='safety'].iloc[:,2:].values[0]
+        self.servoPositions = self.teachpoints.loc[self.teachpoints['Position']=='rest'].iloc[:,2:].values[0]
         self.goToTeachpointSmooth('safety')
         self.state = Manager().dict() #multiprocessing thread safe value passing
         self.state['state'] = 'Initializing'
