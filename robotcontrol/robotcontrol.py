@@ -118,6 +118,19 @@ class RobotControl():
                 self.goToTeachPoint(teachPoint)
         self.changeState(0)
 
+    def runSequenceMenu(self):
+        while (True):
+            print('\n')
+            sequence = raw_input("Please input a sequence to run.  Enter l to list available sequences, q to return to the main menu: ")
+            if sequence == 'l':
+                for seq in self.sequences['sequence'].unique():
+                    print(seq)
+            elif sequence == 'q':
+                break;
+            else:
+                self.runSequence(sequence)
+        self.changeState(0)
+
     # def goToTeachPoint(self,teachpoint,delay=0):
     #     tp = self.teachpoints[self.teachpoints['Position'] == teachpoint]
     #     if tp.shape<1:
@@ -173,7 +186,9 @@ class RobotControl():
         try:
             logging.info('Running sequence')
             while True:
-                time.sleep(1)
+                for x,pt in pts:
+                    self.goToServoPosition(pt,delays[x])
+                    print(pt)
                 if not loop:
                     break;
         except KeyboardInterrupt:
@@ -226,7 +241,7 @@ class RobotControl():
 
             options = {
             0 : self.mainMenu,
-            1 : self.testSequence,
+            1 : self.runSequenceMenu,
             2 : self.goToTeachPointMenu,
             3 : self.goToServoPositionMenu,
             4 : self.printCurrentServoPositions,
