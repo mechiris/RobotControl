@@ -51,7 +51,7 @@ class DataPoster():
         return fulltrajectory
 
 
-    def saveTrajectory(self,fulltrajectory,path='/opt/sightmachine/data/'):
+    def saveTrajectory(self,fulltrajectory,path='/opt/sightmachine/data/robotdata/'):
         outfile = path+time.strftime("%Y%m%d-%H%M%S") + '.csv'
         fulltrajectory.to_csv(outfile)
         sleeptime = fulltrajectory['Time'].iloc[-1] - fulltrajectory['Time'].iloc[0]
@@ -70,8 +70,8 @@ class DataPoster():
             cur_trajectory['counter'] = self.counter 
             cur_trajectory['timestamp'] = 0
             for x in np.arange(0,cur_trajectory.shape[0]):
-                cur_trajectory.loc[x,'timestamp'] = datetime.datetime.now() + datetime.timedelta(0,cur_trajectory.loc[x,'Time'])
-#                cur_trajectory['timestamp'].iloc[x] = datetime.datetime.now() + datetime.timedelta(0,cur_trajectory['Time'].iloc[x])
+                cur_trajectory.loc[x,'timestamp'] = datetime.datetime.utcnow() + datetime.timedelta(0,cur_trajectory.loc[x,'Time'])
+#                cur_trajectory['timestamp'].iloc[x] = datetime.datetime.utcnow() + datetime.timedelta(0,cur_trajectory['Time'].iloc[x])
             self.saveTrajectory(cur_trajectory)            
             if self.state['state'] != initstate:
                 break;
