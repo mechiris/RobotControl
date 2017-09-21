@@ -2,6 +2,8 @@
 Robot control for a 6axis Rot2U
 
 # Install instructions
+sudo apt-get install python-pandas
+
 pip install -r requirements.txt
 
 python setup.py develop
