@@ -171,14 +171,14 @@ class RobotControl():
         
     def runSequence(self, sequence):
         try:
-            cur_seq = sequences[sequences['sequence'] == sequence].iloc[0]
+            cur_seq = self.sequences[self.sequences['sequence'] == sequence].iloc[0]
             pts = [str(p).strip() for p in cur_seq['teachpoints'].split(',')]
             delays = cur_seq['delays'].split(',')
         except:
             logging.info('No sequence ')
         if len(delays) != len(pts):
             logging.info('Delays array is a different length than teachpoints.  Generating delays')
-            delays = np.arange()
+            delays = np.ones(len(pts))
 
         print('running sequence')
         if cur_seq['loop']:
@@ -186,8 +186,8 @@ class RobotControl():
         try:
             logging.info('Running sequence')
             while True:
-                for x,pt in pts:
-                    self.goToServoPosition(pt,delays[x])
+                for x,pt in enumerate(pts):
+                    self.goToTeachPoint(pt,int(delays[x]))
                     print(pt)
                 if not loop:
                     break;
@@ -274,7 +274,7 @@ class RobotControl():
             os.makedirs('/var/log/robotcontrol')
         logging.basicConfig(filename='/var/log/robotcontrol/robotcontrol.log',level=logging.INFO)
         self.teachpoints = pd.read_csv('Teachpoints.csv')
-        self.sequences = pd.read_csv('Sequences.csv')
+        self.sequences = pd.read_csv('Sequences.csv',delimiter=';')
 
         self.pwm = PWM(0x40) 
         self.servoPositions = self.teachpoints.loc[self.teachpoints['Position']=='rest'].iloc[:,2:].values[0]
