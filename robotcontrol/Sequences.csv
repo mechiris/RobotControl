@@ -1,0 +1,3 @@
+sequence,teachpoints,delays,loop
+Pick_Place_cups,"safety, left_pick_hover, left_pick, grip_closed, left_pick_hover, right_pick_hover, grip_open, right_pick","1,1,1,1,1,1,1,1",True
+Spinmove,"safety, left_pick_hover, left_pick, grip_closed, left_pick_hover, right_pick_hover, grip_open, right_pick","1,1,1,1,1,1,1,1",False
