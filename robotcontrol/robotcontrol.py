@@ -274,7 +274,7 @@ class RobotControl():
             os.makedirs('/var/log/robotcontrol')
         logging.basicConfig(filename='/var/log/robotcontrol/robotcontrol.log',level=logging.INFO)
         self.teachpoints = pd.read_csv('Teachpoints.csv')
-        self.sequences = pd.read_excel('Sequences.csv')
+        self.sequences = pd.read_csv('Sequences.csv')
 
         self.pwm = PWM(0x40) 
         self.servoPositions = self.teachpoints.loc[self.teachpoints['Position']=='rest'].iloc[:,2:].values[0]
