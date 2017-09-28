@@ -170,6 +170,7 @@ class RobotControl():
         self.changeState(0)
         
     def runSequence(self, sequence):
+        import pdb; pdb.set_trace()
         try:
             cur_seq = self.sequences[self.sequences['sequence'] == sequence].iloc[0]
             pts = [str(p).strip() for p in cur_seq['teachpoints'].split(',')]
@@ -187,8 +188,9 @@ class RobotControl():
             logging.info('Running sequence')
             while True:
                 for x,pt in enumerate(pts):
-                    self.goToTeachPoint(pt,int(delays[x]))
                     print(pt)
+                    import pdb; pdb.set_trace()
+                    self.goToTeachPoint(pt,int(delays[x]))
                 if not loop:
                     break;
         except KeyboardInterrupt:
