@@ -276,7 +276,8 @@ class RobotControl():
         self.teachpoints = pd.read_csv('Teachpoints.csv')
         self.sequences = pd.read_csv('Sequences.csv',delimiter=';')
 
-        self.pwm = PWM(0x40) 
+        self.pwm = PWM(0x40)
+        self.pwm.setPWMFreq(60)                        # Set frequency to 60 Hz
         self.servoPositions = self.teachpoints.loc[self.teachpoints['Position']=='rest'].iloc[:,2:].values[0]
         self.goToTeachPoint('safety')
         self.state = Manager().dict() #multiprocessing thread safe value passing
