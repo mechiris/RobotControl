@@ -29,11 +29,11 @@ class RobotControl():
     def start(self):
         logging.info('Run started')
 
-        # self.dataPoster = DataPoster()
-        # self.dataPoster.Initialize(self.teachpoints,self.sequences,self.state)
-        # self.parent_conn, self.child_conn = Pipe()
-        # p = Process(target=self.dp.changeState)
-        # p.start()
+        self.dataPoster = DataPoster()
+        self.dataPoster.Initialize(self.teachpoints,self.sequences,self.state)
+        self.parent_conn, self.child_conn = Pipe()
+        p = Process(target=self.dp.changeState)
+        p.start()
 
         self.mainMenu()
 
@@ -170,7 +170,6 @@ class RobotControl():
         self.changeState(0)
         
     def runSequence(self, sequence):
-        import pdb; pdb.set_trace()
         try:
             cur_seq = self.sequences[self.sequences['sequence'] == sequence].iloc[0]
             pts = [str(p).strip() for p in cur_seq['teachpoints'].split(',')]
@@ -184,18 +183,17 @@ class RobotControl():
         print('running sequence')
         if cur_seq['loop']:
             logging.info('Looping sequence.  Use CTL+C to exit loop')
-        try:
-            logging.info('Running sequence')
-            while True:
+        while True:
+            try:
+                logging.info('Running sequence')
                 for x,pt in enumerate(pts):
                     print(pt)
-                    import pdb; pdb.set_trace()
                     self.goToTeachPoint(pt,int(delays[x]))
-                if not loop:
+                if not cur_seq['loop']:
                     break;
-        except KeyboardInterrupt:
-            logging.info('Keypress detected, returning from sequence loop')
-            pass
+            except KeyboardInterrupt:
+               logging.info('Keypress detected, returning from sequence loop')
+               pass
 
     
     def shutdown(self):

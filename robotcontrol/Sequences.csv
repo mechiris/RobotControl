@@ -2,3 +2,4 @@ sequence;teachpoints;delays;loop
 Pick_Place_cups;safety, left_pick_hover, left_pick, grip_closed, left_pick_hover, right_pick_hover, grip_open, right_pick;1,1,1,1,1,1,1,1;True
 Spinmove;safety, left_pick_hover, left_pick, grip_closed, left_pick_hover, right_pick_hover, grip_open, right_pick;1,1,1,1,1,1,1,1;False
 Standard;left_pick_hover, left_pick, grip_pick_closed, left_pick_hover, left_pick, grip_open;1,1,1,1,1,1;True
+Shotglass;safety,left_pick, grip_closed, left_pick_hover, rotate_glass, left_pick_hover, left_pick, grip_open, safety;1,1,1,1,1,1,1,1,1;True
