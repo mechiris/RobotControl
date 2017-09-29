@@ -107,6 +107,7 @@ class DataPoster():
 
     def changeState(self):
         options = {
+        'Initializing' : None,
         'mainMenu' : self.postStopped,
         'runSequence' : self.postSequence,
         'goToTeachPoint' : None,

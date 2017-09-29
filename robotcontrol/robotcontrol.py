@@ -30,9 +30,9 @@ class RobotControl():
         logging.info('Run started')
 
         self.dataPoster = DataPoster()
-        self.dataPoster.Initialize(self.teachpoints,self.sequences,self.state)
+        self.dataPoster.initialize(self.teachpoints,self.sequences,self.state)
         self.parent_conn, self.child_conn = Pipe()
-        p = Process(target=self.dp.changeState)
+        p = Process(target=self.dataPoster.changeState)
         p.start()
 
         self.mainMenu()
