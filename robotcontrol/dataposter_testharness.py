@@ -8,12 +8,12 @@ sequences = pd.read_csv('Sequences.csv',delimiter=';')
 state = Manager().dict() #multiprocessing thread safe value passing
 state['state'] = 'runSequence'
 
-directory = '/opt/sightmachine/data/robotdata/'
+directory = '/opt/sightmachine/data/demorobotdata/'
 if not os.path.exists(directory):
     os.makedirs(directory)
 
 
 dp = DataPoster()
-dp.initialize(teachpoints,sequences,state)
+dp.initialize(teachpoints,sequences,state,directory)
 
 dp.postSequence(state['state'])
