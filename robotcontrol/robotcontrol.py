@@ -29,11 +29,11 @@ class RobotControl():
     def start(self):
         logging.info('Run started')
 
-        self.dataPoster = DataPoster()
-        self.dataPoster.initialize(self.teachpoints,self.sequences,self.state)
-        self.parent_conn, self.child_conn = Pipe()
-        p = Process(target=self.dataPoster.changeState)
-        p.start()
+#        self.dataPoster = DataPoster()
+#        self.dataPoster.initialize(self.teachpoints,self.sequences,self.state)
+#        self.parent_conn, self.child_conn = Pipe()
+#        p = Process(target=self.dataPoster.changeState)
+#        p.start()
 
         self.mainMenu()
 
@@ -267,7 +267,6 @@ class RobotControl():
         self.changeState(int(newState))
 
     def __init__(self):
-        #print('RobotControl Initializing')
         number_of_servos = 6
 
         if not os.path.exists('/var/log/robotcontrol'):
