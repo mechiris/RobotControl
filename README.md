@@ -6,7 +6,6 @@ The arm is driven using a raspberry pi, affixed w/ the adafruit PWM/Servo shield
 # Install instructions
 On the raspberry pi:
 
-.. code:: bash
     git clone https://github.com/mechiris/RobotControl.git
     sudo apt-get install python-pandas #faster than compiling from scratch
     cd RobotControl
