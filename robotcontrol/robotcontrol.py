@@ -12,6 +12,8 @@ import glob
 import json
 import csv
 import copy 
+import thread
+
 
 
 class RobotControl():
@@ -118,6 +120,7 @@ class RobotControl():
                 self.goToTeachPoint(teachPoint)
         self.changeState(0)
 
+
     def runSequenceMenu(self):
         while (True):
             print('\n')
@@ -169,6 +172,11 @@ class RobotControl():
                     self.goToServoPosition(int(servoChannel), int(servoextent))
         self.changeState(0)
         
+    def input_thread(a_list):
+        raw_input("Press any key to stop sequence")
+        a_list.append(True)
+
+
     def runSequence(self, sequence):
         try:
             cur_seq = self.sequences[self.sequences['sequence'] == sequence].iloc[0]
@@ -184,7 +192,9 @@ class RobotControl():
         if cur_seq['loop']:
             logging.info('Looping sequence.  Use CTL+C to exit loop')
             print('Looping sequence.  Use ctl+C to exit loop')
-        while True:
+        a_list = []
+        thread.start_new_thread(input_thread, (a_list,))
+        while not a_list:
             try:
                 logging.info('Running sequence')
                 for x,pt in enumerate(pts):
@@ -192,10 +202,10 @@ class RobotControl():
                     self.goToTeachPoint(pt,int(delays[x]))
                 if not cur_seq['loop']:
                     break;
-            except KeyboardInterrupt:
-               logging.info('Keypress detected, returning from sequence loop')
-               import pdb; pdb.set_trace()
-               break
+            # except KeyboardInterrupt:
+            #    logging.info('Keypress detected, returning from sequence loop')
+            #    import pdb; pdb.set_trace()
+            #    break
 
     def shutdown(self):
         logging.info('Shutting down system')
