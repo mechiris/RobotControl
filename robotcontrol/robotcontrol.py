@@ -273,11 +273,11 @@ class RobotControl():
     def __init__(self):
         number_of_servos = 6
 
-        if not os.path.exists('/var/log/robotcontrol'):
-            os.makedirs('/var/log/robotcontrol')
-        logging.basicConfig(filename='/var/log/robotcontrol/robotcontrol.log',level=logging.INFO)
-        self.teachpoints = pd.read_csv('Teachpoints.csv')
-        self.sequences = pd.read_csv('Sequences.csv',delimiter=';')
+        installdir = os.path.dirname(__file__)
+
+        logging.basicConfig(filename=installdir + '/robotcontrol.log',level=logging.INFO)
+        self.teachpoints = pd.read_csv(installdir + '/Teachpoints.csv')
+        self.sequences = pd.read_csv(installdir + '/Sequences.csv',delimiter=';')
 
         self.pwm = PWM(0x40)
         self.pwm.setPWMFreq(60)                        # Set frequency to 60 Hz
