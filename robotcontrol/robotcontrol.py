@@ -183,19 +183,20 @@ class RobotControl():
         print('running sequence')
         if cur_seq['loop']:
             logging.info('Looping sequence.  Use CTL+C to exit loop')
+            print('Looping sequence.  Use ctl+C to exit loop')
         while True:
             try:
                 logging.info('Running sequence')
                 for x,pt in enumerate(pts):
-                    print(pt)
+                    #print(pt)
                     self.goToTeachPoint(pt,int(delays[x]))
                 if not cur_seq['loop']:
                     break;
             except KeyboardInterrupt:
                logging.info('Keypress detected, returning from sequence loop')
-               pass
+               import pdb; pdb.set_trace()
+               break
 
-    
     def shutdown(self):
         logging.info('Shutting down system')
         self.goToTeachPoint('safety')
