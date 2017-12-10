@@ -171,11 +171,10 @@ class RobotControl():
                 else:
                     self.goToServoPosition(int(servoChannel), int(servoextent))
         self.changeState(0)
-        
+           
     def input_thread(a_list):
         raw_input("Press any key to stop sequence")
         a_list.append(True)
-
 
     def runSequence(self, sequence):
         try:
@@ -195,17 +194,12 @@ class RobotControl():
         a_list = []
         thread.start_new_thread(input_thread, (a_list,))
         while not a_list:
-            try:
-                logging.info('Running sequence')
-                for x,pt in enumerate(pts):
-                    #print(pt)
-                    self.goToTeachPoint(pt,int(delays[x]))
-                if not cur_seq['loop']:
-                    break;
-            # except KeyboardInterrupt:
-            #    logging.info('Keypress detected, returning from sequence loop')
-            #    import pdb; pdb.set_trace()
-            #    break
+            logging.info('Running sequence')
+            for x,pt in enumerate(pts):
+                #print(pt)
+                self.goToTeachPoint(pt,int(delays[x]))
+            if not cur_seq['loop']:
+                break
 
     def shutdown(self):
         logging.info('Shutting down system')
