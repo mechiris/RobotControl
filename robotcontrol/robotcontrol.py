@@ -172,9 +172,10 @@ class RobotControl():
                     self.goToServoPosition(int(servoChannel), int(servoextent))
         self.changeState(0)
            
-    def input_thread(a_list):
-        raw_input("Press any key to stop sequence")
+    def input_thread(self, a_list):
+        raw_input("Press enter to stop sequence")
         a_list.append(True)
+        print('Stopping loop after this sequence run completes')
 
     def runSequence(self, sequence):
         try:
@@ -187,14 +188,12 @@ class RobotControl():
             logging.info('Delays array is a different length than teachpoints.  Generating delays')
             delays = np.ones(len(pts))
 
-        print('running sequence')
-        if cur_seq['loop']:
-            logging.info('Looping sequence.  Use CTL+C to exit loop')
-            print('Looping sequence.  Use ctl+C to exit loop')
+        print('Running sequence')
+
         a_list = []
-        thread.start_new_thread(input_thread, (a_list,))
+        if cur_seq['loop']:
+            thread.start_new_thread(self.input_thread, (a_list,))
         while not a_list:
-            logging.info('Running sequence')
             for x,pt in enumerate(pts):
                 #print(pt)
                 self.goToTeachPoint(pt,int(delays[x]))
