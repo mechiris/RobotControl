@@ -51,8 +51,8 @@ class DataPoster():
         return fulltrajectory
 
 
-    def saveTrajectory(self,fulltrajectory,path='/opt/sightmachine/data/robotdata/'):
-        outfile = path+time.strftime("%Y%m%d-%H%M%S") + '.csv'
+    def saveTrajectory(self,fulltrajectory):
+        outfile = self.path+time.strftime("%Y%m%d-%H%M%S") + '.csv'
         fulltrajectory.to_csv(outfile)
         sleeptime = fulltrajectory['Time'].iloc[-1] - fulltrajectory['Time'].iloc[0]
         print('Saving {}s trajectory to: {}'.format(sleeptime,outfile))
@@ -120,12 +120,13 @@ class DataPoster():
         else:
             self.holdingPattern(self.state['state']) #wait for another state change
     
-    def initialize(self,teachpoints,sequences,state):
+    def initialize(self,teachpoints,sequences,state,path='/opt/sightmachine/data/rpi/'):
         self.teachpoints = teachpoints
         self.sequences = sequences
         self.state = state
         self.trajectories = {} #dict of trajectories to save for sslog collection
         self.keySequence = ''
+        self.path = path
 
     def __init__(self):
         ### Configureable parameters ###
