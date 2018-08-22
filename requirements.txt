@@ -1,0 +1,3 @@
+RPi.GPIO
+pandas
+numpy
